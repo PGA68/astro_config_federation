@@ -1,3 +1,5 @@
+Задумана структура для хранения всех субдоменов в одном проекте:
+
 Astro_v6/
 ├── shared/                    # Common root – symlink targets
 │   ├── components/            # Shared components (Header, Footer, etc.)
@@ -62,7 +64,7 @@ Astro_v6/
 "setup-symlinks": "node scripts/setup-symlinks.js"
 ```
 
-Оставлены ваши скрипты Astro: `dev`, `build`, `preview`, `astro`.
+Оставлены скрипты Astro: `dev`, `build`, `preview`, `astro`.
 
 ---
 
@@ -116,7 +118,62 @@ pnpm run setup-symlinks -- subdomains/new-site
 
 Если нужно, могу подсказать, как добавить в репозиторий `shared/` и `subdomains/` в `.gitignore` или, наоборот, закоммитить только структуру без сгенерированного Astro.
 
-Кратко, что сделано:
+# Резюме
+---
+
+## Новая папка модуля: `astro_config_federation/`
+
+
+
+```
+astro_config_federation/
+├── package.json          # все настройки в блоке "astro_config_federation"
+├── .gitignore            # subdomains/, node_modules/ — без сгенерированного Astro
+├── scripts/
+│   ├── config.js         # читает настройки из package.json
+│   ├── build-subdomain.js
+│   ├── build-all.js
+│   ├── setup-symlinks.js
+│   └── scaffold.js
+└── shared/
+    └── .gitkeep
+```
+
+### Настройки в `package.json`
+
+Блок **`astro_config_federation`**:
+
+| Ключ | Назначение |
+|------|------------|
+| `sharedDir` | Папка общего кода (по умолчанию `shared`) |
+| `subdomainsDir` | Папка поддоменов (по умолчанию `subdomains`) |
+| `defaultSubdomainName` | Имя первого поддомена при scaffold (по умолчанию `default`) |
+| `sharedFolders` | Папки, которые симлинкуются из shared (`components`, `layouts`, `styles`, `assets`) |
+| `scaffold.astroVersion` | Версия Astro при создании (`latest`) |
+| `scaffold.template` | Шаблон create-astro (`basics`) |
+| `scaffold.typescript` | Режим TypeScript (`strict`) |
+| `scaffold.install` | Запускать ли установку зависимостей |
+| `scaffold.git` | Инициализировать ли git в поддомене |
+
+Скрипты берут пути и опции из этого блока; при необходимости их можно переопределять через переменные окружения (`SUBDOMAIN_NAME`, `SUBDOMAINS_DIR`, `SHARED_DIR`).
+
+### Что не коммитится
+
+В **`.gitignore`** добавлены:
+
+- **`subdomains/`** — сгенерированные Astro-проекты после `pnpm run scaffold`
+- `node_modules/`, логи, `.env`, `.DS_Store`, `.idea/`
+
+В репозиторий попадают только структура каталогов, скрипты и пустая `shared/` (через `.gitkeep`).
 
 ---
 
+## Как пользоваться модулем
+
+```bash
+cd /media/wisbat/Adata_SSD_29/Projects/Astro_v6/origin/astro_config_federation
+pnpm run scaffold
+pnpm run build:subdomain -- subdomains/default
+pnpm run build:all
+pnpm run setup-symlinks -- subdomains/new-site
+```
