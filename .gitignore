@@ -1,0 +1,14 @@
+# Generated subdomains (Astro apps created by scaffold)
+subdomains/
+
+# Dependencies (if user runs pnpm install in module root)
+node_modules/
+
+# Logs and env
+*.log
+.env
+.env.*
+
+# OS
+.DS_Store
+.idea/

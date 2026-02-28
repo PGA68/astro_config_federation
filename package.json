@@ -1,0 +1,50 @@
+{
+  "name": "astro_config_federation",
+  "version": "0.0.1",
+  "description": "pnpm library for Astro multi-subdomain setup with shared folders and symlinks",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "scaffold": "node scripts/scaffold.js",
+    "build:subdomain": "node scripts/build-subdomain.js",
+    "build:all": "node scripts/build-all.js",
+    "setup-symlinks": "node scripts/setup-symlinks.js"
+  },
+  "files": [
+    "scripts",
+    "shared"
+  ],
+  "exports": {
+    "./scripts/build-subdomain": "./scripts/build-subdomain.js",
+    "./scripts/build-all": "./scripts/build-all.js",
+    "./scripts/setup-symlinks": "./scripts/setup-symlinks.js",
+    "./scripts/scaffold": "./scripts/scaffold.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "astro",
+    "subdomain",
+    "federation",
+    "monorepo",
+    "pnpm"
+  ],
+  "license": "MIT",
+  "astro_config_federation": {
+    "sharedDir": "shared",
+    "subdomainsDir": "subdomains",
+    "defaultSubdomainName": "default",
+    "sharedFolders": ["components", "layouts", "styles", "assets"],
+    "scaffold": {
+      "astroVersion": "latest",
+      "template": "basics",
+      "typescript": "strict",
+      "install": true,
+      "git": false
+    }
+  }
+}
